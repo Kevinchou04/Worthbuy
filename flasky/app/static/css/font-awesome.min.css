@@ -1,0 +1,22 @@
+/* Code tidied up by ScrapBook */
+@font-face {
+  font-family: "FontAwesome";
+  font-style: normal;
+  font-weight: normal;
+  src: url("fontawesome-webfont.eot") format("embedded-opentype"), url("fontawesome-webfont.woff2") format("woff2"), url("fontawesome-webfont.woff") format("woff"), url("fontawesome-webfont.ttf") format("truetype"), url("fontawesome-webfont.svg") format("svg");
+}
+.fa { display: inline-block; font-family: FontAwesome; font-style: normal; font-weight: normal; line-height: 1; font-size-adjust: none; font-stretch: normal; font-feature-settings: normal; font-language-override: normal; font-kerning: auto; font-synthesis: weight style; font-variant: normal; font-size: inherit; text-rendering: auto; }
+.pull-right { float: right; }
+@keyframes fa-spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(359deg); }
+}
+@keyframes fa-spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(359deg); }
+}
+.fa-search::before { content: ""; }
+.fa-star::before { content: ""; }
+.fa-info-circle::before { content: ""; }
+.fa-angle-up::before { content: ""; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); border: 0px none; }
