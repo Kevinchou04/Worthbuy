@@ -25,24 +25,24 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_register_and_login(self):
         # register a new account
         response = self.client.post(url_for('auth.register'), data={
-            'email': 'john@example.com',
-            'username': 'john',
-            'password': 'cat',
-            'password2': 'cat'
+            'email': 'deabal@gdut.com',
+            'username': 'deabal',
+            'password': 'deabal666',
+            'password2': 'deabal666'
         })
         self.assertTrue(response.status_code == 302)
 
         # login with the new account
         response = self.client.post(url_for('auth.login'), data={
-            'email': 'john@example.com',
-            'password': 'cat'
+            'email': 'deabal@gdut.com',
+            'password': 'deabal666'
         }, follow_redirects=True)
-        self.assertTrue(re.search(b'Hello,\s+john!', response.data))
+        self.assertTrue(re.search(b'Hello,\s+deabal!', response.data))
         self.assertTrue(
             b'You have not confirmed your account yet' in response.data)
 
         # send a confirmation token
-        user = User.query.filter_by(email='john@example.com').first()
+        user = User.query.filter_by(email='deabal@gdut.com').first()
         token = user.generate_confirmation_token()
         response = self.client.get(url_for('auth.confirm', token=token),
                                    follow_redirects=True)

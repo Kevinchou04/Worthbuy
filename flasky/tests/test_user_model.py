@@ -6,6 +6,7 @@ from app.models import User, AnonymousUser, Role, Permission, Follow
 
 
 class UserModelTestCase(unittest.TestCase):
+    # 用于数据库测试的初始化
     def setUp(self):
         self.app = create_app('testing')
         self.app_context = self.app.app_context()
@@ -13,111 +14,127 @@ class UserModelTestCase(unittest.TestCase):
         db.create_all()
         Role.insert_roles()
 
+    # 清除在数据库中产生的数据，然后关闭连接。
     def tearDown(self):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
 
+    # 设置密码的单元测试
     def test_password_setter(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         self.assertTrue(u.password_hash is not None)
 
+    # 无密码测试
     def test_no_password_getter(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         with self.assertRaises(AttributeError):
             u.password
 
+    # 密码认证
     def test_password_verification(self):
-        u = User(password='cat')
-        self.assertTrue(u.verify_password('cat'))
-        self.assertFalse(u.verify_password('dog'))
+        u = User(password='Superman')
+        self.assertTrue(u.verify_password('Superman'))
+        self.assertFalse(u.verify_password('SuperWoman'))
 
+    # 测试不同用户的密码哈希
     def test_password_salts_are_random(self):
-        u = User(password='cat')
-        u2 = User(password='cat')
+        u = User(password='Superman')
+        u2 = User(password='Superman')
         self.assertTrue(u.password_hash != u2.password_hash)
 
+    # 测试合法密钥
     def test_valid_confirmation_token(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         db.session.add(u)
         db.session.commit()
         token = u.generate_confirmation_token()
         self.assertTrue(u.confirm(token))
 
+    # 测试无效密钥
     def test_invalid_confirmation_token(self):
-        u1 = User(password='cat')
-        u2 = User(password='dog')
+        u1 = User(password='Superman')
+        u2 = User(password='SuperWoman')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
         token = u1.generate_confirmation_token()
         self.assertFalse(u2.confirm(token))
 
+    # 测试过期密钥
     def test_expired_confirmation_token(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         db.session.add(u)
         db.session.commit()
         token = u.generate_confirmation_token(1)
         time.sleep(2)
         self.assertFalse(u.confirm(token))
 
+    # 测试重置密钥
     def test_valid_reset_token(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         db.session.add(u)
         db.session.commit()
         token = u.generate_reset_token()
-        self.assertTrue(u.reset_password(token, 'dog'))
-        self.assertTrue(u.verify_password('dog'))
+        self.assertTrue(u.reset_password(token, 'SuperWoman'))
+        self.assertTrue(u.verify_password('SuperWoman'))
 
+    # 测试非法重置密钥
     def test_invalid_reset_token(self):
-        u1 = User(password='cat')
-        u2 = User(password='dog')
+        u1 = User(password='Superman')
+        u2 = User(password='SuperWoman')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
         token = u1.generate_reset_token()
         self.assertFalse(u2.reset_password(token, 'horse'))
-        self.assertTrue(u2.verify_password('dog'))
+        self.assertTrue(u2.verify_password('SuperWoman'))
 
+    # 测试成功更换邮箱
     def test_valid_email_change_token(self):
-        u = User(email='john@example.com', password='cat')
+        u = User(email='john@gdut.com', password='Superman')
         db.session.add(u)
         db.session.commit()
-        token = u.generate_email_change_token('susan@example.org')
+        token = u.generate_email_change_token('susan@gdut.com')
         self.assertTrue(u.change_email(token))
-        self.assertTrue(u.email == 'susan@example.org')
+        self.assertTrue(u.email == 'susan@gdut.com')
 
+    # 测试失败更换邮箱
     def test_invalid_email_change_token(self):
-        u1 = User(email='john@example.com', password='cat')
-        u2 = User(email='susan@example.org', password='dog')
+        u1 = User(email='john@gdut.com', password='Superman')
+        u2 = User(email='susan@gdut.com', password='SuperWoman')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
-        token = u1.generate_email_change_token('david@example.net')
+        token = u1.generate_email_change_token('david@gdut.net')
         self.assertFalse(u2.change_email(token))
-        self.assertTrue(u2.email == 'susan@example.org')
+        self.assertTrue(u2.email == 'susan@gdut.com')
 
+    # 测试重复邮箱更换
     def test_duplicate_email_change_token(self):
-        u1 = User(email='john@example.com', password='cat')
-        u2 = User(email='susan@example.org', password='dog')
+        u1 = User(email='john@gdut.com', password='Superman')
+        u2 = User(email='susan@gdut.com', password='SuperWoman')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
-        token = u2.generate_email_change_token('john@example.com')
+        token = u2.generate_email_change_token('john@gdut.com')
         self.assertFalse(u2.change_email(token))
-        self.assertTrue(u2.email == 'susan@example.org')
+        self.assertTrue(u2.email == 'susan@gdut.com')
 
+    # 测试用户密码
     def test_roles_and_permissions(self):
-        u = User(email='john@example.com', password='cat')
+        u = User(email='john@gdut.com', password='Superman')
         self.assertTrue(u.can(Permission.WRITE_ARTICLES))
         self.assertFalse(u.can(Permission.MODERATE_COMMENTS))
 
+    # 测试匿名用户
     def test_anonymous_user(self):
         u = AnonymousUser()
         self.assertFalse(u.can(Permission.FOLLOW))
 
+    # 测试时间戳
     def test_timestamps(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         db.session.add(u)
         db.session.commit()
         self.assertTrue(
@@ -125,8 +142,9 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(
             (datetime.utcnow() - u.last_seen).total_seconds() < 3)
 
+    # 测试ping
     def test_ping(self):
-        u = User(password='cat')
+        u = User(password='Superman')
         db.session.add(u)
         db.session.commit()
         time.sleep(2)
@@ -134,6 +152,8 @@ class UserModelTestCase(unittest.TestCase):
         u.ping()
         self.assertTrue(u.last_seen > last_seen_before)
 
+
+    # 测试头像
     def test_gravatar(self):
         u = User(email='john@example.com', password='cat')
         with self.app.test_request_context('/'):
@@ -151,9 +171,10 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue('https://secure.gravatar.com/avatar/' +
                         'd4c74594d841139328695756648b6bd6' in gravatar_ssl)
 
+    # 测试粉丝列表
     def test_follows(self):
-        u1 = User(email='john@example.com', password='cat')
-        u2 = User(email='susan@example.org', password='dog')
+        u1 = User(email='john@gdut.com', password='Superman')
+        u2 = User(email='susan@gdut.com', password='SuperWoman')
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
@@ -189,7 +210,7 @@ class UserModelTestCase(unittest.TestCase):
         self.assertTrue(Follow.query.count() == 1)
 
     def test_to_json(self):
-        u = User(email='john@example.com', password='cat')
+        u = User(email='john@gdut.com', password='Superman')
         db.session.add(u)
         db.session.commit()
         json_user = u.to_json()

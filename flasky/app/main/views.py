@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response
+    current_app, make_response,session
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
@@ -8,6 +8,9 @@ from .forms import EditProfileForm, EditProfileAdminForm, PostForm,\
 from .. import db
 from ..models import Permission, Role, User, Post, Comment
 from ..decorators import admin_required, permission_required
+from flask_wtf import Form
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 
 @main.after_app_request
@@ -19,6 +22,25 @@ def after_request(response):
                 % (query.statement, query.parameters, query.duration,
                    query.context))
     return response
+
+
+class CommentForm(Form):
+    name = StringField("输入评论", validators=[DataRequired()])
+    submit = SubmitField('提交')
+
+# 什么值得买页面
+@main.route('/worthbuy', methods=['GET', 'POST'])
+def worthbuy():
+    comments =None
+    form = CommentForm()
+    if form.validate_on_submit():
+        old_comments = session.get('comments')
+        if old_comments is not None and old_comments != form.name.data:
+            flash('已经评论了!')
+        session['comments'] = form.name.data
+        return redirect(url_for('main.worthbuy'))
+
+    return render_template('worthbuy.html',form = form,comments =session.get('comments'))
 
 
 @main.route('/shutdown')
