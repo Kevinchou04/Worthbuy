@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}
+{% endblock %}
+
+<div class="container">
+{% block page_content %}
+    <div class="row" style="margin-top: 50px;">
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[0].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[0].pic_num }}.jpg">
+            <a>{{ thing[0].thing}}</a>
+        </a>
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[1].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[1].pic_num }}.jpg">
+            <a>{{ thing[1].thing}}</a>
+        </a>
+
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[2].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[2].pic_num }}.jpg">
+            <a>{{ thing[2].thing}}</a>
+        </a>
+
+    </div>
+    </div>
+
+    <div class="row" style="margin-top: 50px;">
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[3].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[3].pic_num }}.jpg">
+            <a>{{ thing[3].thing}}</a>
+        </a>
+
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[4].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[4].pic_num }}.jpg">
+            <a>{{ thing[4].thing}}</a>
+        </a>
+
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[5].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[5].pic_num }}.jpg">
+            <a>{{ thing[5].thing}}</a>
+        </a>
+
+    </div>
+    </div>
+
+    <div class="row" style="margin-top: 50px;">
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[6].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[6].pic_num }}.jpg">
+            <a>{{ thing[6].thing}}</a>
+        </a>
+
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[7].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[7].pic_num }}.jpg">
+            <a>{{ thing[7].thing}}</a>
+        </a>
+
+    </div>
+    <div class="col-lg-4">
+        <a href="{{ url_for('.thing',thing_id=thing[8].id) }}">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing[8].pic_num }}.jpg">
+            <a>{{ thing[8].thing}}</a>
+        </a>
+
+    </div>
+    </div>
+    <div class="text-center">
+    <button class="btn-success btn-lg">next</button>
+
+    </div>
+{% endblock %}
+</div>
+{% block scripts %}
+{{ super() }}
+{% endblock %}

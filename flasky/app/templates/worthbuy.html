@@ -4,11 +4,230 @@
 {% block title %}WorthBuy{% endblock %}
 
 {% block page_content %}
-<h1>{% if comments %}{{ comments }}{% else %}No comments!{% endif %}</h1>
-<h2>评论区</h2>
-    <div class="form-group">
-    {{ wtf.quick_form(form) }}
+<div class="container">
+<hr class="panel-body">
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-center">
+    <form style="display: inline;" action="{{url_for('.search')}}" method="post" name="search">
+        {{g.search_form.hidden_tag()}}
+        {{g.search_form.search(class="input-lg")}}
+        <input class="btn-lg" type="submit" value="搜索">
+    </form>
+</div>
+        </div>
     </div>
+
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-lg-10 " style="margin-left: 100px;">
+            <div id="carousel-example-generic3" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic3" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic3" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic3" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active"><a href="{{ url_for('.thing',thing_id=001) }}">
+      <img src="../static/pic/s1.jpg"  style="margin-left:70px;height: 400px;width: auto;" alt="图片1">
+      </a><div class="carousel-caption">
+      </div>
+    </div>
+    <div class="item">
+        <a href="{{ url_for('.thing',thing_id=002) }}">
+      <img src="../static/pic/s2.jpg "  style="margin-left:100px;height: 400px;width: auto;" alt="图片2">
+      </a><div class="carousel-caption">
+      </div>
+    </div>
+      <div class="item"><a href="{{ url_for('.thing',thing_id=003) }}">
+      <img src="../static/pic/s3.jpg"  style="margin-left:150px;height: 400px;width: auto;" alt="图片3">
+      </a><div class="carousel-caption">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic3" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic3" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+        </div>
+    </div>
+
+{#    <div class="row" style="margin-top: 50px;margin-bottom: 50px;">#}
+{#        <div class="col-lg-6 " >#}
+{##}
+{##}
+{#            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">#}
+{#  <!-- Indicators -->#}
+{#  <ol class="carousel-indicators">#}
+{#    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>#}
+{#    <li data-target="#carousel-example-generic" data-slide-to="1"></li>#}
+{#    <li data-target="#carousel-example-generic" data-slide-to="2"></li>#}
+{#  </ol>#}
+{##}
+{#  <!-- Wrapper for slides -->#}
+{#  <div class="carousel-inner" role="listbox">#}
+{#    <div class="item active"><a href="{{ url_for('.thing',thing_id=001) }}">#}
+{#      <img src="../static/pic/1.jpg"  style="margin-left:70px;height: 400px;width: auto;" alt="图片1">#}
+{#      </a><div class="carousel-caption">#}
+{#        静音闹钟#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="item">#}
+{#        <a href="{{ url_for('.thing',thing_id=002) }}">#}
+{#      <img src="../static/pic/2.jpg "  style="margin-left:70px;height: 400px;width: auto;" alt="图片2">#}
+{#      </a><div class="carousel-caption">#}
+{#        清洁器#}
+{#      </div>#}
+{#    </div>#}
+{#      <div class="item"><a href="{{ url_for('.thing',thing_id=003) }}">#}
+{#      <img src="../static/pic/3.jpg"  style="margin-left:70px;height: 400px;width: auto;" alt="图片3">#}
+{#      </a><div class="carousel-caption">#}
+{#        卡通布艺沙发#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#  </div>#}
+{##}
+{#  <!-- Controls -->#}
+{#  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">#}
+{#    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>#}
+{#    <span class="sr-only">Previous</span>#}
+{#  </a>#}
+{#  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">#}
+{#    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>#}
+{#    <span class="sr-only">Next</span>#}
+{#  </a>#}
+{#</div>#}
+{##}
+{##}
+{#        </div>#}
+{##}
+{#        <div class="col-lg-6 " >#}
+{##}
+{##}
+{#            <div id="carousel-example-generic-1" class="carousel slide" data-ride="carousel">#}
+{#  <!-- Indicators -->#}
+{#  <ol class="carousel-indicators">#}
+{#    <li data-target="#carousel-example-generic-1" data-slide-to="3" class="active"></li>#}
+{#    <li data-target="#carousel-example-generic-1" data-slide-to="4"></li>#}
+{#    <li data-target="#carousel-example-generic-1" data-slide-to="5"></li>#}
+{#  </ol>#}
+{##}
+{#  <!-- Wrapper for slides -->#}
+{#  <div class="carousel-inner" role="listbox">#}
+{#    <div class="item active"><a href="{{ url_for('.thing',thing_id=4) }}">#}
+{#      <img src="../static/pic/4.jpg"  style="margin-left:70px;height: 400px;width: auto;" alt="图片4">#}
+{#      </a><div class="carousel-caption">#}
+{#        空气凤梨#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="item">#}
+{#        <a href="{{ url_for('.thing',thing_id=5) }}">#}
+{#      <img src="../static/pic/5.jpg "  style="margin-left:70px;height: 400px;width: auto;" alt="图片5">#}
+{#      </a><div class="carousel-caption">#}
+{#        摇椅#}
+{#      </div>#}
+{#    </div>#}
+{#      <div class="item"><a href="{{ url_for('.thing',thing_id=6) }}">#}
+{#      <img src="../static/pic/6.jpg"  style="margin-left:70px;height: 400px;width: auto;" alt="图片6">#}
+{#      </a><div class="carousel-caption">#}
+{#        懒人洗衣机#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#  </div>#}
+{##}
+{#  <!-- Controls -->#}
+{#  <a class="left carousel-control" href="#carousel-example-generic-1" role="button" data-slide="prev">#}
+{#    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>#}
+{#    <span class="sr-only">Previous</span>#}
+{#  </a>#}
+{#  <a class="right carousel-control" href="#carousel-example-generic-1" role="button" data-slide="next">#}
+{#    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>#}
+{#    <span class="sr-only">Next</span>#}
+{#  </a>#}
+{#</div>#}
+{##}
+{##}
+{#        </div>#}
+{##}
+{#    </div>#}
+
+
+<div class="text-center"><h3>推荐商品</h3></div>
+<hr/>
+    <div class="row" style="margin-top: 80px;">
+        {% for i in range(4) %}
+        <div class="col-md-3">
+            <a href="{{ url_for('.thing',thing_id=things[i].id) }}">
+                    <img class="img-responsive center-block" href="{{ url_for('.thing',thing_id=things[i].id) }}"
+                         src="../static/pic/{{ things[i].id }}.jpg" style="size: 60px;">
+                </a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+<hr/>
+<div class="row" style="margin-top: 80px;">
+        {% for i in range(4) %}
+        <div class="col-md-3">
+            <a href="{{ url_for('.thing',thing_id=things[i + 9].id) }}">
+                    <img class="img-responsive center-block" href="{{ url_for('.thing',thing_id=things[i + 9].id) }}"
+                         src="../static/pic/{{ things[i + 9].id }}.jpg" style="size: 60px;">
+                </a>
+        </div>
+        {% endfor %}
+    </div>
+
+<div class="text-center" style="margin-top: 40px;"><h3>达人分享</h3></div>
+
+    <hr style="margin-top: 50px;margin-bottom:10px;size: 5px;"/>
+    <a href="{{ url_for('main.thing_list') }}" class="pull-right">更多>></a>
+    {% for i in range(3) %}
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-md-4">
+            <a href="{{ url_for('.thing',thing_id=things[i + 4].id) }}">
+                    <img class="img-responsive center-block" href="{{ url_for('.thing',thing_id=things[i + 4].id) }}"
+                         src="../static/pic/{{ things[i + 4].id }}.jpg" style="width:200px;height:auto;size: 60px;">
+                </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="{{ url_for('.thing',thing_id=things[i + 4].id) }}">
+                <h3>{{ things[i + 4].thing }}</h3>
+            </a>
+            <br/>
+            <a style="font-size: 20px;">
+                ¥{{ things[i + 4].price}}
+            </a>
+
+    </div>
+
+</div>
+{% endfor %}
+
+
+
+<div class="footer" style="margin-top: 30px;">
+    <div class="text-center">
+        <a style="font-size: 30px;">关于我们</a>
+    </div>
+</div>
+</div>
 
 {% endblock %}
 

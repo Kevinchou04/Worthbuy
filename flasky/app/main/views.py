@@ -1,17 +1,21 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response,session
+    current_app, make_response,session,g
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm,\
-    CommentForm
+    CommentForm,SearchForm,ThingForm
 from .. import db
-from ..models import Permission, Role, User, Post, Comment
+from ..models import Permission, Role, User, Post, Comment,Thing
 from ..decorators import admin_required, permission_required
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
+
+@main.before_request
+def before_request():
+    g.search_form=SearchForm()
 
 @main.after_app_request
 def after_request(response):
@@ -24,23 +28,24 @@ def after_request(response):
     return response
 
 
-class CommentForm(Form):
-    name = StringField("输入评论", validators=[DataRequired()])
-    submit = SubmitField('提交')
+# class CommentForm(Form):
+#     name = StringField("输入评论", validators=[DataRequired()])
+#     submit = SubmitField('提交')
 
 # 什么值得买页面
 @main.route('/worthbuy', methods=['GET', 'POST'])
 def worthbuy():
-    comments =None
-    form = CommentForm()
-    if form.validate_on_submit():
-        old_comments = session.get('comments')
-        if old_comments is not None and old_comments != form.name.data:
-            flash('已经评论了!')
-        session['comments'] = form.name.data
-        return redirect(url_for('main.worthbuy'))
+    # comments =None
+    # form = CommentForm()
+    # if form.validate_on_submit():
+    #     old_comments = session.get('comments')
+    #     if old_comments is not None and old_comments != form.body.data:
+    #         flash('已经评论了!')
+    #     session['comments'] = form.body.data
+    #     return redirect(url_for('main.worthbuy'))
+    things = Thing.query.filter().all()
 
-    return render_template('worthbuy.html',form = form,comments =session.get('comments'))
+    return render_template('worthbuy.html',things = things)
 
 
 @main.route('/shutdown')
@@ -62,7 +67,7 @@ def index():
         post = Post(body=form.body.data,
                     author=current_user._get_current_object())
         db.session.add(post)
-        return redirect(url_for('.index'))
+        return redirect(url_for('.worthbuy'))
     page = request.args.get('page', 1, type=int)
     show_followed = False
     if current_user.is_authenticated:
@@ -290,3 +295,59 @@ def moderate_disable(id):
     db.session.add(comment)
     return redirect(url_for('.moderate',
                             page=request.args.get('page', 1, type=int)))
+
+@main.route('/search',methods=['GET','POST'])
+@login_required
+def search():
+    if not g.search_form.validate_on_submit():
+         return redirect(url_for('.worthbuy'))
+    return redirect(url_for('.search_results',query=g.search_form.search.data))
+
+@main.route('/search_results/<query>')
+def search_results(query):
+    results = Thing.query.filter(Thing.thing.ilike('%'+query+'%')).all()
+    return render_template('search_results.html',
+    query = query,
+    results = results)
+
+@main.route('/edit_thing', methods=['GET', 'POST'])
+@login_required
+def edit_thing():
+    new_thing=None
+    form = ThingForm()
+    if form.validate_on_submit():
+        new_thing = Thing(thing=form.name.data,price=form.price.data,about=form.about.data,href=form.href.data)
+        db.session.add(new_thing)
+        db.session.commit()
+        flash('商品已经上传成功')
+        form.name.data=''
+        form.price.data=''
+        form.about.data=''
+        form.href.data=''
+
+    return render_template('edit_thing.html',form=form)
+
+@main.route('/thing/<thing_id>')
+def thing(thing_id):
+    thing = Thing.query.filter_by(id=thing_id).first_or_404()
+    comments = Comment.query.filter_by(thing_id=thing_id).all()
+    form = CommentForm()
+    if form.validate_on_submit():
+        comments.body = form.body.data
+        db.session.add(comments)
+        db.session.commit()
+    return render_template('thing.html',thing=thing,comments=comments,form=form)
+
+@main.route('/vote/<thing_id>')
+def vote(thing_id):
+    thing = Thing.query.filter_by(id=thing_id).first()
+    thing.loved+=1
+    db.session.add(thing)
+    db.session.commit()
+    return render_template('thing.html')
+
+@main.route('/thing_list')
+def thing_list():
+    thing = Thing.query.filter().all()
+
+    return render_template('thing_list.html',thing=thing)

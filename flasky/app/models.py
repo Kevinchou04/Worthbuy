@@ -67,7 +67,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
-    confirmed = db.Column(db.Boolean, default=False)
+    confirmed = db.Column(db.Boolean, default=True)
     name = db.Column(db.String(64))
     location = db.Column(db.String(64))
     about_me = db.Column(db.Text())
@@ -352,6 +352,7 @@ class Comment(db.Model):
     disabled = db.Column(db.Boolean)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    thing_id = db.Column(db.Integer,db.ForeignKey('things.id'))
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
@@ -379,6 +380,20 @@ class Comment(db.Model):
         if body is None or body == '':
             raise ValidationError('comment does not have a body')
         return Comment(body=body)
+
+class Thing(db.Model):
+    __tablename__='things'
+    id = db.Column(db.Integer, primary_key=True)
+    thing = db.Column(db.String(64))
+    comments = db.relationship('Comment', backref='thing')
+    price = db.Column(db.Integer)
+    about = db.Column(db.String(256))
+    pic_num = db.Column(db.Integer,unique=True)
+    href = db.Column(db.String(64))
+    loved = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Thing %r>' % self.thing
 
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)

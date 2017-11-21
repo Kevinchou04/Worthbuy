@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+    edit_thing
+{% endblock %}
+
+{% block page_content %}
+    <div>
+    <div class="text-center">
+    <h2>请输入您想提交的商品信息</h2>
+        </div>
+    <div class="col-md-4 text-center" style="margin-left: 300px;">
+        <div class="form-group">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

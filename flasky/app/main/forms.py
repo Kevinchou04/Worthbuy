@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, BooleanField, SelectField,\
-    SubmitField
-from wtforms.validators import Required, Length, Email, Regexp
+    SubmitField,IntegerField
+from wtforms.validators import Required, Length, Email, Regexp,DataRequired
 from wtforms import ValidationError
 from flask_pagedown.fields import PageDownField
 from ..models import Role, User
@@ -56,5 +56,16 @@ class PostForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    body = StringField('Enter your comment', validators=[Required()])
-    submit = SubmitField('Submit')
+    body = StringField('请输入评论', validators=[Required()])
+    submit = SubmitField('提交')
+
+class SearchForm(FlaskForm):
+    search = StringField('输入搜索',validators=[Required()],render_kw={"placeholder":"搜索商品"})
+    submit = SubmitField("搜索")
+
+class ThingForm(FlaskForm):
+    name = StringField('商品名字',validators=[DataRequired()])
+    price = IntegerField('商品单价',validators=[DataRequired()])
+    href = StringField('商品链接')
+    about = TextAreaField('商品介绍')
+    submit = SubmitField('提交')

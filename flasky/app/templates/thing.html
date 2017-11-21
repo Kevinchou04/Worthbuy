@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+    商品--{{ thing.thing }}
+{% endblock %}
+<div class="container">
+{% block page_content %}
+    <div class="row">
+    <div class="col-lg-4">
+        <a href="#">
+            <img class="img-responsive center-block" href="#"
+                 src="../static/pic/{{ thing.pic_num }}.jpg">
+        </a>
+    </div>
+    <div class="col-lg-8">
+        <div id="thing_name" >
+            <h2>
+                {{ thing.thing }}
+            </h2>
+        </div>
+        <div>
+            <ul>
+                <li>
+                    物品号：{{ thing.id }}
+                </li>
+                <li>
+                    点赞数：{{ thing.loved }}
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    物品价格：{{ thing.price }}
+                </li>
+                <li>
+                    物品链接：<a href="{{ thing.href }}">{{ thing.href }}</a>
+                </li>
+            </ul>
+        </div>
+
+        <button type="button" name = "vote" id="vote" class="zan pull-right btn btn-warning" >点赞</button>
+
+
+        <button type="button" name = "share" class="pull-right btn btn-success" data-toggle="modal" data-target="#myModal">分享</button>
+{#         模态框触发#}
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-hidden="true">&times;</button>
+                                    <h4 class="modal-title" id="myModalLabel">分享商品</h4>
+                                </div>
+                                <div class="modal-body">与好友分享你的宝物：Hi，我在WorthBuy值得买中发现了一件宝物：{{ thing.thing }}，只要 {{ thing.price }} 元就可以带回家哦
+快来{{ thing.href }}来购买吧！                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" href="#">复制</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
+                    </div>
+
+
+
+
+    </div>
+
+    </div>
+
+    <div class="row" style="margin-top: 100px;">
+    <div class="col-lg-12">
+        <div>
+            <p>评论区：</p>
+            <hr/>
+            <div>
+                <div class="form-group">
+                {{ wtf.quick_form(form) }}
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+</div>
+
+
+{% block scripts %}
+{{ super() }}
+{#$("vote").click(function () {#}
+{#    if (this.name == "zan") {#}
+{#        this.innerHTML = "<i class='iconfont unzan'></i>";#}
+{#        this.name = "vote";#}
+{##}
+{#        var url = "{{ url_for('.vote', thing_id=thing.id) }}";#}
+{#        $.ajax({#}
+{#            type: 'POST',#}
+{#            url: url,#}
+{#            data: JSON.stringify(data_dic),#}
+{#            dataType: 'json',#}
+{#            success: function (data) {#}
+{#                window.history.back();#}
+{#            }#}
+{#        });#}
+{##}
+{#    }#}
+{##}
+{#});#}
+{% endblock %}

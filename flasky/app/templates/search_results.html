@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}
+    search_result
+{% endblock %}
+<div class="container">
+{% block page_content %}
+
+
+    <div class="sw_sform">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="search-wraper" role="search">
+                        <div class="form-group text-center">
+                            <form style="display: inline;" action="{{url_for('.search')}}" method="post" name="search">
+                                {{g.search_form.hidden_tag()}}
+                                {{g.search_form.search(class="search clearable")}}
+                                <button class="btn-success btn" type="button submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="font-size: 20px;">
+                物品搜索结果:
+            </div>
+        {% for thing in results %}
+            <div class="panel-body" style="padding:6px;border-bottom: 1px solid #eeeeee">
+                <div class="row">
+{#                    <div class="col-md-4 col-xs-2">#}
+                    <div class="col-md-4 col-sm-4 col-xs-6">
+                        <div class="search_thing">
+                            <a href="{{ url_for('.thing',thing_id=thing.id)}}" target="_blank">
+                                <img  class="center-block" style="width: 230px;height: auto;" src="../static/pic/{{ thing.pic_num }}.jpg">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-xs-6">
+                        <a href="{{ url_for('.thing',thing_id=thing.id)}}" target="_blank">
+                        <h2 href="{{ url_for('.worthbuy') }}">{{ thing.thing }}</h2>
+                        </a>
+                        <a href="{{ url_for('.worthbuy') }}">{{ thing.price }}</a>
+                        /<a href="{{ url_for('.worthbuy') }}">{{ thing.href }}</a>
+                        <br/>
+                        简介：{{ thing.about }}
+                        <br/>
+                        <button type="button" class="pull-right btn btn-warning">点赞</button>
+                        <button type="button" class="pull-right btn btn-primary">评论</button>
+                    </div>
+                </div>
+             </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{#    {% if results %}#}
+{#{% for thing in results %}#}
+{#        <div class="">#}
+{#            <a>物品名：{{ thing.thing }}<br/></a>#}
+{#            <a>物品价格：{{ thing.price }}<br/></a>#}
+{#            <a>物品链接：{{ thing.href }}<br/></a>#}
+{#            <a>物品简介：{{ thing.about }}<br/></a>#}
+{#        </div>#}
+{#    <div>#}
+{#    <a href="#">#}
+{#                    <img class="img-responsive center-block" href="#"#}
+{#                         src="../static/pic/{{ thing.pic_num }}.jpg">#}
+{#                </a>#}
+{##}
+{##}
+{#        </div>#}
+{#    {% endfor %}#}
+{#        {% else %}#}
+{#        搜索结果为空#}
+{#    {% endif %}#}
+{% endblock %}
+</div>
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}
